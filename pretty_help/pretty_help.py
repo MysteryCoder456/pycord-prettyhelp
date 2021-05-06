@@ -34,6 +34,8 @@ class Paginator:
         self.field_limit = 25
         self.prefix = ""
         self.suffix = ""
+        self.usage_prefix = "```"
+        self.usage_suffix = "```"
         self.clear()
 
     def clear(self):
@@ -158,7 +160,7 @@ class Paginator:
                 inline=False,
             )
         page.add_field(
-            name="Usage", value=f"{self.prefix}{signature}{self.suffix}", inline=False
+            name="Usage", value=f"{self.usage_prefix}{signature}{self.usage_suffix}", inline=False
         )
         self._add_page(page)
 
