@@ -27,7 +27,8 @@ class Paginator:
         The footer in of the help embed
     """
 
-    def __init__(self, color=0):
+    def __init__(self, color, pretty_help: "PrettyHelp"):
+        self.pretty_help = pretty_help
         self.ending_note = None
         self.color = color
         self.char_limit = 6000
@@ -139,7 +140,7 @@ class Paginator:
             info = "None"
         return info
 
-    def add_command(self, command: commands.Command, signature: str):
+    def add_command(self, command: commands.Command, signature: str) -> discord.Embed:
         """
         Add a command help page
 
@@ -163,6 +164,7 @@ class Paginator:
             name="Usage", value=f"{self.usage_prefix}{signature}{self.usage_suffix}", inline=False
         )
         self._add_page(page)
+        return page
 
     def add_group(self, group: commands.Group, commands_list: List[commands.Command]):
         """
@@ -172,8 +174,9 @@ class Paginator:
             group (commands.Group): The command group to get help for
             commands_list (List[commands.Command]): The list of commands in the group
         """
-        page = self._new_page(
-            group.name, f"{self.prefix}{self.__command_info(group)}{self.suffix}" or ""
+
+        page = self.add_command(
+            group, self.pretty_help.get_command_signature(group)
         )
 
         self._add_command_fields(page, group.name, commands_list)
@@ -262,7 +265,7 @@ class PrettyHelp(HelpCommand):
         self.sort_commands = options.pop("sort_commands", True)
         self.show_index = options.pop("show_index", True)
         self.menu = options.pop("menu", DefaultMenu())
-        self.paginator = Paginator(color=self.color)
+        self.paginator = Paginator(self.color, self)
         self.ending_note = options.pop("ending_note", "")
 
         super().__init__(**options)
