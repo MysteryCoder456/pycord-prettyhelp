@@ -32,8 +32,8 @@ class Paginator:
         self.color = color
         self.char_limit = 6000
         self.field_limit = 25
-        self.prefix = "```"
-        self.suffix = "```"
+        self.prefix = ""
+        self.suffix = ""
         self.clear()
 
     def clear(self):
@@ -123,7 +123,6 @@ class Paginator:
             embed.add_field(
                 name=command.name,
                 value=f'{self.prefix}{command.short_doc or "No Description"}{self.suffix}',
-                inline=False,
             )
         self._add_page(embed)
 
@@ -193,7 +192,6 @@ class Paginator:
                 index.add_field(
                     name=f"{page_no}) {page.title}",
                     value=f'{self.prefix}{page.description or "No Description"}{self.suffix}',
-                    inline=False,
                 )
             index.set_footer(text=self.ending_note)
             self._pages.insert(0, index)
