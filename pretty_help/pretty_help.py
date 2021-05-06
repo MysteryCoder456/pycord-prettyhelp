@@ -206,16 +206,7 @@ class Paginator:
     @property
     def pages(self):
         """Returns the rendered list of pages."""
-        if len(self._pages) == 1:
-            return self._pages
-        lst = []
-        for page_no, page in enumerate(self._pages, start=1):
-            page: discord.Embed
-            page.description = (
-                f"`Page: {page_no}/{len(self._pages)}`\n{page.description}"
-            )
-            lst.append(page)
-        return lst
+        return self._pages
 
 
 class PrettyHelp(HelpCommand):
