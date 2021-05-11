@@ -99,7 +99,6 @@ class Paginator:
         embed = self._new_page(page_title, (title.description or "") if cog else "")
 
         self._add_command_fields(embed, page_title, commands_list)
-        self._add_page(embed)
 
     def _add_command_fields(
         self, embed: discord.Embed, page_title: str, commands: List[commands.Command]
@@ -128,6 +127,7 @@ class Paginator:
                 name=command.name,
                 value=f'{self.prefix}{command.short_doc or "No Description"}{self.suffix}',
             )
+            self._add_page(embed)
 
     @staticmethod
     def __command_info(command: Union[commands.Command, commands.Group]):
