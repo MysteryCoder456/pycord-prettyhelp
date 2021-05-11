@@ -190,6 +190,7 @@ class Paginator:
         """
         if include:
             index = self._new_page(title, bot.description or "")
+            self._pages.pop(-1)
 
             for page_no, page in enumerate(self._pages, start=1):
                 index.add_field(
@@ -197,7 +198,6 @@ class Paginator:
                     value=f'{self.prefix}{page.description or "No Description"}{self.suffix}',
                 )
             index.set_footer(text=self.ending_note)
-            self._pages.pop(-1)
             self._pages.insert(0, index)
         else:
             self._pages[0].description = bot.description
