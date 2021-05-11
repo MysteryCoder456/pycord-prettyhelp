@@ -69,7 +69,9 @@ class Paginator:
         Returns:
             discord.Emebed: Returns an embed with the title and color set
         """
-        return discord.Embed(title=title, description=description, color=self.color)
+        embed = discord.Embed(title=title, description=description, color=self.color)
+        self._add_page(embed)
+        return embed
 
     def _add_page(self, page: discord.Embed):
         """
@@ -120,17 +122,15 @@ class Paginator:
                 self.prefix,
                 self.suffix,
             ):
-                self._add_page(embed)
                 embed = self._new_page(page_title, embed.description)
 
             embed.add_field(
                 name=command.name,
                 value=f'{self.prefix}{command.short_doc or "No Description"}{self.suffix}',
             )
-        self._add_page(embed)
 
     @staticmethod
-    def __command_info(command: Union[commands.Command, commands.Group]):
+    def __command_info(command: Union[commands.Command, commands.Group]) -> str:
         info = ""
         if command.description:
             info += command.description + "\n\n"
@@ -148,7 +148,6 @@ class Paginator:
             command (commands.Command): The command to get help for
             signature (str): The command signature/usage string
         """
-        desc = f"{command.description}\n\n" if command.description else ""
         page = self._new_page(
             command.qualified_name,
             f"{self.prefix}{self.__command_info(command)}{self.suffix}" or "",
@@ -163,7 +162,6 @@ class Paginator:
         page.add_field(
             name="Usage", value=f"{self.usage_prefix}{signature}{self.usage_suffix}", inline=False
         )
-        self._add_page(page)
         return page
 
     def add_group(self, group: commands.Group, commands_list: List[commands.Command]):
