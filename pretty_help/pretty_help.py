@@ -127,7 +127,7 @@ class Paginator:
                 name=command.name,
                 value=f'{self.prefix}{command.short_doc or "No Description"}{self.suffix}',
             )
-            self._add_page(embed)
+        self._add_page(embed)
 
     @staticmethod
     def __command_info(command: Union[commands.Command, commands.Group]):
