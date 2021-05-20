@@ -140,7 +140,7 @@ class Paginator:
                 name=command.name,
                 value=(
                     f'{self.prefix}{command.short_doc or "No Description"}'
-                    f'{self.suffix}',
+                    f'{self.suffix}'
                 ),
             )
 
