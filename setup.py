@@ -13,7 +13,7 @@ setup(
     version=__version__,
     packages=["discord.ext.prettyhelp"],
     license="MIT",
-    description="A module for making setup wizards easily.",
+    description="A pretty embeded version of the default help command.",
     long_description=README,
     long_description_content_type="text/markdown",
     install_requires=["discord.py>=1.2.5"],
