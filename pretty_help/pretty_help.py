@@ -301,13 +301,8 @@ class PrettyHelp(HelpCommand):
         channel = self.get_destination()
         async with channel.typing():
             mapping = dict((name, []) for name in mapping)
-            help_filtered = (
-                filter(lambda c: c.name != "help", bot.commands)
-                if len(bot.commands) > 1
-                else bot.commands
-            )
             for cmd in await self.filter_commands(
-                help_filtered,
+                bot.commands,
                 sort=self.sort_commands,
             ):
                 mapping[cmd.cog].append(cmd)
@@ -334,7 +329,6 @@ class PrettyHelp(HelpCommand):
             filtered = await self.filter_commands(
                 group.commands, sort=self.sort_commands
             )
-            # if filtered:
             self.paginator.add_group(group, filtered)
         await self.send_pages()
 
