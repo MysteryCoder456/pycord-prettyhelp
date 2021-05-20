@@ -21,8 +21,6 @@ bot = commands.Bot(
 )
 ```
 
-
-
 ### Added Optional Args
 
 - `color` - Set the default embed color
