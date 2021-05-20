@@ -221,7 +221,7 @@ class Paginator:
                     name=f"{page_no}) {page.title}",
                     value=(
                         f'{self.prefix}{page.description or "No Description"}'
-                        f'{self.suffix}',
+                        f'{self.suffix}'
                     ),
                 )
             index.set_footer(text=self.ending_note)
