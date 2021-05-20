@@ -298,14 +298,15 @@ class PrettyHelp(HelpCommand):
     ):
         if ctx.guild is not None:
             perms = ctx.channel.permissions_for(ctx.guild.me)
+            missing: List[str] = []
             if not perms.embed_links:
-                raise commands.BotMissingPermissions(("embed links",))
+                missing.append("Embed Links")
             if not perms.read_message_history:
-                raise commands.BotMissingPermissions(("read message history",))
+                missing.append("Read Message History")
             if not perms.add_reactions:
-                raise commands.BotMissingPermissions(
-                    ("add reactions permission",)
-                )
+                missing.append("Add Reactions")
+            if missing:
+                raise commands.BotMissingPermissions(missing)
 
         self.paginator.clear()
         self.paginator.ending_note = self.get_ending_note()
