@@ -1,4 +1,4 @@
-# discord-pretty-help
+# discord-ext-prettyhelp
 
 An embed version of the built in help command for discord.py
 
@@ -6,7 +6,7 @@ Inspired by the DefaultHelpCommand that discord.py uses, but revised for embeds 
 
 ## Installation
 
-`pip install discord-pretty-help`
+`pip install discord-ext-prettyhelp`
 
 ## Usage
 
