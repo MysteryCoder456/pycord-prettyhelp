@@ -121,8 +121,12 @@ class DefaultMenu(PrettyMenu):
                         ):
                             return True
 
-                    payload: discord.RawReactionActionEvent = await bot.wait_for(
-                        "raw_reaction_add", timeout=self.active_time, check=check
+                    payload: discord.RawReactionActionEvent = (
+                        await bot.wait_for(
+                            "raw_reaction_add",
+                            timeout=self.active_time,
+                            check=check,
+                        )
                     )
 
                     emoji_name = (

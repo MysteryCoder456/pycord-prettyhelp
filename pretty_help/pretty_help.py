@@ -54,7 +54,8 @@ class Paginator:
             bool: Will return True if the emebed isn't too large
         """
         check = (
-            len(embed) + sum(len(char) for char in chars if char) < self.char_limit
+            len(embed) + sum(len(char) for char in chars if char)
+            < self.char_limit
             and len(embed.fields) < self.field_limit
         )
         return check
@@ -69,7 +70,9 @@ class Paginator:
         Returns:
             discord.Emebed: Returns an embed with the title and color set
         """
-        embed = discord.Embed(title=title, description=description, color=self.color)
+        embed = discord.Embed(
+            title=title, description=description, color=self.color
+        )
         self._add_page(embed)
         return embed
 
@@ -84,7 +87,9 @@ class Paginator:
         self._pages.append(page)
 
     def add_cog(
-        self, title: Union[str, commands.Cog], commands_list: List[commands.Command]
+        self,
+        title: Union[str, commands.Cog],
+        commands_list: List[commands.Command],
     ):
         """
         Add a cog page to the help menu
@@ -98,12 +103,17 @@ class Paginator:
             return
 
         page_title = title.qualified_name if cog else title
-        embed = self._new_page(page_title, (title.description or "") if cog else "")
+        embed = self._new_page(
+            page_title, (title.description or "") if cog else ""
+        )
 
         self._add_command_fields(embed, page_title, commands_list)
 
     def _add_command_fields(
-        self, embed: discord.Embed, page_title: str, commands: List[commands.Command]
+        self,
+        embed: discord.Embed,
+        page_title: str,
+        commands: List[commands.Command],
     ):
         """
         Adds command fields to Category/Cog and Command Group pages
@@ -130,7 +140,9 @@ class Paginator:
             )
 
     @staticmethod
-    def __command_info(command: Union[commands.Command, commands.Group]) -> str:
+    def __command_info(
+        command: Union[commands.Command, commands.Group]
+    ) -> str:
         info = ""
         if command.description:
             info += command.description + "\n\n"
@@ -140,7 +152,9 @@ class Paginator:
             info = "None"
         return info
 
-    def add_command(self, command: commands.Command, signature: str) -> discord.Embed:
+    def add_command(
+        self, command: commands.Command, signature: str
+    ) -> discord.Embed:
         """
         Add a command help page
 
@@ -160,11 +174,15 @@ class Paginator:
                 inline=False,
             )
         page.add_field(
-            name="Usage", value=f"{self.usage_prefix}{signature}{self.usage_suffix}", inline=False
+            name="Usage",
+            value=f"{self.usage_prefix}{signature}{self.usage_suffix}",
+            inline=False,
         )
         return page
 
-    def add_group(self, group: commands.Group, commands_list: List[commands.Command]):
+    def add_group(
+        self, group: commands.Group, commands_list: List[commands.Command]
+    ):
         """
         Add a group help page
 
@@ -247,7 +265,9 @@ class PrettyHelp(HelpCommand):
 
         self.color = options.pop(
             "color",
-            discord.Color.from_rgb(randint(0, 255), randint(0, 255), randint(0, 255)),
+            discord.Color.from_rgb(
+                randint(0, 255), randint(0, 255), randint(0, 255)
+            ),
         )
         self.dm_help = options.pop("dm_help", False)
         self.index_title = options.pop("index_title", "Categories")
@@ -270,7 +290,9 @@ class PrettyHelp(HelpCommand):
             if not perms.read_message_history:
                 raise commands.BotMissingPermissions(("read message history",))
             if not perms.add_reactions:
-                raise commands.BotMissingPermissions(("add reactions permission",))
+                raise commands.BotMissingPermissions(
+                    ("add reactions permission",)
+                )
 
         self.paginator.clear()
         self.paginator.ending_note = self.get_ending_note()
@@ -321,7 +343,9 @@ class PrettyHelp(HelpCommand):
     async def send_command_help(self, command: commands.Command):
         filtered = await self.filter_commands([command])
         if filtered:
-            self.paginator.add_command(command, self.get_command_signature(command))
+            self.paginator.add_command(
+                command, self.get_command_signature(command)
+            )
             await self.send_pages()
 
     async def send_group_help(self, group: commands.Group):
