@@ -1,5 +1,3 @@
-![version](https://img.shields.io/pypi/v/discord-pretty-help) ![python](https://img.shields.io/badge/python-3.6+-blue)
-
 # discord-pretty-help
 
 An embed version of the built in help command for discord.py
@@ -18,7 +16,9 @@ Example of how to use it:
 from discord.ext import commands
 from pretty_help import PrettyHelp
 
-bot = commands.Bot(command_prefix="!", help_command=PrettyHelp())
+bot = commands.Bot(
+    command_prefix="!", help_command=PrettyHelp()
+)
 ```
 
 
@@ -49,30 +49,27 @@ from discord.ext import commands
 from pretty_help import DefaultMenu, PrettyHelp
 
 # ":discord:743511195197374563" is a custom discord emoji format. Adjust to match your own custom emoji.
-menu = DefaultMenu(page_left="\U0001F44D", page_right="👎", remove=":discord:743511195197374563", active_time=5)
+menu = DefaultMenu(
+    page_left="\U0001F44D",
+    page_right="👎",
+    remove=":discord:743511195197374563",
+    active_time=5,
+)
 
 # Custom ending note
-ending_note = "The ending note from {ctx.bot.user.name}\nFor command {help.clean_prefix}{help.invoked_with}"
+ending_note = (
+    "The ending note from {ctx.bot.user.name}"
+    "\nFor command {help.clean_prefix}{help.invoked_with}"
+)
 
 bot = commands.Bot(command_prefix="!")
 
-bot.help_command = PrettyHelp(menu=menu, ending_note=ending_note)
+bot.help_command = PrettyHelp(
+    menu=menu, ending_note=ending_note
+)
 ```
 
 The basic `help` command will break commands up by cogs. Each cog will be a different page. Those pages can be navigated with
 the arrow embeds. The message is unresponsive after 30s of no activity, it'll remove the reactions to let you know.
 
 ![example](https://raw.githubusercontent.com/stroupbslayen/discord-pretty-help/master/images/example.gif)
-
-# Changelog
-
-## [1.3.0]
-- Replaced `Navigation` with `DefaultMenu`
-- Allowed for custom Menus to be used, should inherit from `PrettyMenu` and must use `send_pages()` method
-- `active_time` is now part of the `DefaultMenu` args
-
-
-# Notes:
-- discord.py must already be installed to use this
-- `manage-messages` permission is recommended so reactions can be removed automatically
-
