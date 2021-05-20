@@ -35,15 +35,18 @@ class DefaultMenu(PrettyMenu):
     Using a custom emoji:
         - Discord emoji id:: ":custom_emoji:8675309"
 
-    Use `\` to get the discord representation:
-        Example: '\\\:custom_emoji:' in discord
+    Use `\\` to get the discord representation:
+        Example: '\\:custom_emoji:' in discord
 
     Args:
         active_time: :class: `int`
             The time in seconds the menu will be active for. Default is 10.
-        page_left (str, optional): The emoji to use for going left. Defaults to "◀".
-        page_right (str, optional): The emoji to use for going right. Defaults to "▶".
-        remove (str, optional): The emoji to use for removing the help message. Defaults to "❌".
+        page_left (str, optional): The emoji to use for going left.
+            Defaults to "◀".
+        page_right (str, optional): The emoji to use for going right.
+            Defaults to "▶".
+        remove (str, optional): The emoji to use for removing the help message.
+            Defaults to "❌".
     """
 
     def __init__(
@@ -91,7 +94,10 @@ class DefaultMenu(PrettyMenu):
         return self._dict.__iter__()
 
     def __repr__(self) -> str:
-        return f"<Navigation left:{self.page_left} right:{self.page_right} remove:{self.remove}>"
+        return (
+            f"<Navigation left:{self.page_left} right:{self.page_right} "
+            f"remove:{self.remove}>"
+        )
 
     async def send_pages(
         self,

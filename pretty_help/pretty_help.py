@@ -22,7 +22,8 @@ class Paginator:
     max_size: :class:`int`
         The maximum amount of codepoints allowed in a page.
     color: Optional[:class:`discord.Color`, :class: `int`]
-        The color of the disord embed. Default is a random color for every invoke
+        The color of the disord embed. Default is a random color for
+        every invoke
     ending_note: Optional[:class:`str`]
         The footer in of the help embed
     """
@@ -121,7 +122,8 @@ class Paginator:
         Args:
             embed (discord.Embed): The page to add command descriptions
             page_title (str): The title of the page
-            commands (List[commands.Command]): The list of commands for the fields
+            commands (List[commands.Command]): The list of commands for
+                the fields
         """
         for command in commands:
             if not self._check_embed(
@@ -136,7 +138,10 @@ class Paginator:
 
             embed.add_field(
                 name=command.name,
-                value=f'{self.prefix}{command.short_doc or "No Description"}{self.suffix}',
+                value=(
+                    f'{self.prefix}{command.short_doc or "No Description"}'
+                    f'{self.suffix}',
+                ),
             )
 
     @staticmethod
@@ -188,7 +193,8 @@ class Paginator:
 
         Args:
             group (commands.Group): The command group to get help for
-            commands_list (List[commands.Command]): The list of commands in the group
+            commands_list (List[commands.Command]): The list of commands in
+                the group
         """
 
         page = self.add_command(
@@ -213,7 +219,10 @@ class Paginator:
             for page_no, page in enumerate(self._pages, start=1):
                 index.add_field(
                     name=f"{page_no}) {page.title}",
-                    value=f'{self.prefix}{page.description or "No Description"}{self.suffix}',
+                    value=(
+                        f'{self.prefix}{page.description or "No Description"}'
+                        f'{self.suffix}',
+                    ),
                 )
             index.set_footer(text=self.ending_note)
             self._pages.insert(0, index)
@@ -238,11 +247,12 @@ class PrettyHelp(HelpCommand):
     color: :class: `discord.Color`
         The color to use for the help embeds. Default is a random color.
     dm_help: Optional[:class:`bool`]
-        A tribool that indicates if the help command should DM the user instead of
-        sending it to the channel it received it from. If the boolean is set to
-        ``True``, then all help output is DM'd. If ``False``, none of the help
-        output is DM'd. If ``None``, then the bot will only DM when the help
-        message becomes too long (dictated by more than :attr:`dm_help_threshold` characters).
+        A tribool that indicates if the help command should DM the user
+        instead of sending it to the channel it received it from. If the
+        boolean is set to ``True``, then all help output is DM'd. If
+        ``False``, none of the help output is DM'd. If ``None``, then
+        the bot will only DM when the help message becomes too long
+        (dictated by more than :attr:`dm_help_threshold` characters).
         Defaults to ``False``.
     menu: Optional[:class:`pretty_help.PrettyMenu`]
         The menu to use for navigating pages. Defautl is :class:`DefaultMenu`
@@ -250,15 +260,18 @@ class PrettyHelp(HelpCommand):
     ending_note: Optional[:class:`str`]
         The footer in of the help embed
     index_title: :class: `str`
-        The string used when the index page is shown. Defaults to ``"Categories"``
+        The string used when the index page is shown. Defaults to
+        ``"Categories"``
     no_category: :class:`str`
-        The string used when there is a command which does not belong to any category(cog).
+        The string used when there is a command which does not belong to
+        any category(cog).
         Useful for i18n. Defaults to ``"No Category"``
     sort_commands: :class:`bool`
-        Whether to sort the commands in the output alphabetically. Defaults to ``True``.
+        Whether to sort the commands in the output alphabetically. Defaults to
+        ``True``.
     show_index: class: `bool`
-        A bool that indicates if the index page should be shown listing the available cogs
-        Defaults to ``True``.
+        A bool that indicates if the index page should be shown listing the
+        available cogs. Defaults to ``True``.
     """
 
     def __init__(self, **options):
@@ -299,10 +312,13 @@ class PrettyHelp(HelpCommand):
         await super().prepare_help_command(ctx, command)
 
     def get_ending_note(self):
-        """Returns help command's ending note. This is mainly useful to override for i18n purposes."""
+        """Returns help command's ending note.
+
+        This is mainly useful to override for i18n purposes."""
         note = self.ending_note or (
-            "Type {help.clean_prefix}{help.invoked_with} command for more info on a command.\n"
-            "You can also type {help.clean_prefix}{help.invoked_with} category for more info on a category."
+            "Type {help.clean_prefix}{help.invoked_with} command for more "
+            "info on a command.\nYou can also type {help.clean_prefix}"
+            "{help.invoked_with} category for more info on a category."
         )
         return note.format(ctx=self.context, help=self)
 

@@ -1,19 +1,25 @@
 """
-Note: Rename `env.example` to `.env` and enter your token then run `poetry run test` in your terminal
+Note: Rename `env.example` to `.env` and enter your token then run
+`poetry run test` in your terminal
 """
 import os
 
-from discord.ext import commands
-from pretty_help import DefaultMenu, PrettyHelp
 import dotenv
+from discord.ext import commands
+
+from pretty_help import DefaultMenu, PrettyHelp
 
 dotenv.load_dotenv("./tests/.env")
 
-# ":discord:743511195197374563" is a custom discord emoji format. Adjust to match your own custom emoji.
-menu = DefaultMenu("\U0001F44D", "👎", ":discord:743511195197374563")
+# ":discord:743511195197374563" is a custom discord emoji format. Adjust
+# to match your own custom emoji.
+menu = DefaultMenu("\U0001F44D", "👎", "\N{BLACK SQUARE FOR STOP}")
 
 # Custom ending note
-ending_note = "The ending not from {ctx.bot.user.name}\nFor command {help.clean_prefix}{help.invoked_with}"
+ending_note = (
+    "The ending note from {ctx.bot.user.name}\n"
+    "For command {help.clean_prefix}{help.invoked_with}"
+)
 
 bot = commands.Bot(
     command_prefix="!",
