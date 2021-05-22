@@ -14,7 +14,7 @@ Example of how to use it:
 
 ```python
 from discord.ext import commands
-from pretty_help import PrettyHelp
+from discord.ext.prettyhelp import PrettyHelp
 
 bot = commands.Bot(
     command_prefix="!", help_command=PrettyHelp()
@@ -44,7 +44,7 @@ By default, the help will just pick a random color on every invoke. You can chan
 ```python
 
 from discord.ext import commands
-from pretty_help import DefaultMenu, PrettyHelp
+from discord.ext.prettyhelp import DefaultMenu, PrettyHelp
 
 # ":discord:743511195197374563" is a custom discord emoji format. Adjust to match your own custom emoji.
 menu = DefaultMenu(
