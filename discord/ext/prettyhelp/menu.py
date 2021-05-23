@@ -6,6 +6,7 @@ from abc import ABCMeta
 from typing import List
 
 import discord
+from discord.embeds import EmptyEmbed
 from discord.ext import commands
 
 
@@ -106,6 +107,15 @@ class DefaultMenu(PrettyMenu):
         pages: List[discord.Embed],
     ):
         total = len(pages)
+
+        if total > 1:
+            for x, e in enumerate(pages, 1):
+                new_footer = (
+                    e.footer.text + "\n" if e.footer.text is not EmptyEmbed
+                    else ""
+                ) + f"Page {x}/{total}"
+                e.set_footer(text=new_footer)
+
         message: discord.Message = await destination.send(embed=pages[0])
 
         if total > 1:

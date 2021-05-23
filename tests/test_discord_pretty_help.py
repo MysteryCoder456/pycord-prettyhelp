@@ -7,7 +7,7 @@ import os
 import dotenv
 from discord.ext import commands
 
-from pretty_help import DefaultMenu, PrettyHelp
+from discord.ext.prettyhelp import DefaultMenu, PrettyHelp
 
 dotenv.load_dotenv("./tests/.env")
 
