@@ -198,7 +198,6 @@ class Paginator:
         if self.pretty_help.show_user_perms:
             try:
                 chan_perms = command.channel_perms
-                guild_perms = command.guild_perms
             except AttributeError:
                 pass
             else:
@@ -208,6 +207,11 @@ class Paginator:
                         value=", ".join(chan_perms),
                         inline=False,
                     )
+            try:
+                guild_perms = command.guild_perms
+            except AttributeError:
+                pass
+            else:
                 if guild_perms:
                     page.add_field(
                         name=self.pretty_help.user_guild_perms_title,
