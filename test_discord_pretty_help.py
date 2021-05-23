@@ -7,7 +7,13 @@ import os
 import dotenv
 from discord.ext import commands
 
-from discord.ext.prettyhelp import DefaultMenu, PrettyHelp
+from discord.ext.prettyhelp import (
+    DefaultMenu,
+    PrettyHelp,
+    bot_has_permissions,
+    has_guild_permissions,
+    has_permissions,
+)
 
 dotenv.load_dotenv("./tests/.env")
 
@@ -28,6 +34,8 @@ bot = commands.Bot(
 bot.help_command = PrettyHelp(
     menu=menu,
     ending_note=ending_note,
+    show_user_perms=True,
+    show_bot_perms=True,
 )
 
 
@@ -193,6 +201,15 @@ class LargeCog(commands.Cog):
 @bot.command()
 async def test(ctx: commands.Context):
     await ctx.send("this is the test command")
+
+
+@has_permissions(send_messages=True)
+@has_guild_permissions(send_messages=True)
+@bot_has_permissions(send_messages=True)
+@bot_has_permissions(view_channel=True)
+@bot.command()
+async def test_permission_fields(ctx: commands.Context):
+    await ctx.send("whoo hooo")
 
 
 def run():

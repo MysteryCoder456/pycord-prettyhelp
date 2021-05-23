@@ -183,6 +183,37 @@ class Paginator:
             value=f"{self.usage_prefix}{signature}{self.usage_suffix}",
             inline=False,
         )
+        if self.pretty_help.show_bot_perms:
+            try:
+                perms = command.bot_perms
+            except AttributeError:
+                pass
+            else:
+                if perms:
+                    page.add_field(
+                        name=self.pretty_help.bot_perms_title,
+                        value=", ".join(perms),
+                        inline=False,
+                    )
+        if self.pretty_help.show_user_perms:
+            try:
+                chan_perms = command.channel_perms
+                guild_perms = command.guild_perms
+            except AttributeError:
+                pass
+            else:
+                if chan_perms:
+                    page.add_field(
+                        name=self.pretty_help.user_channel_perms_title,
+                        value=", ".join(chan_perms),
+                        inline=False,
+                    )
+                if guild_perms:
+                    page.add_field(
+                        name=self.pretty_help.user_guild_perms_title,
+                        value=", ".join(guild_perms),
+                        inline=False,
+                    )
         return page
 
     def add_group(
@@ -272,6 +303,24 @@ class PrettyHelp(HelpCommand):
     show_index: class: `bool`
         A bool that indicates if the index page should be shown listing the
         available cogs. Defaults to ``True``.
+    show_bot_perms: class: `bool`
+        Whether or not running help <command> should show the permissions that
+        the bot needs. Defaults to ``False``.
+    show_user_perms: class: `bool`
+        Whether or not running help <command> should show the permissions that
+        the user needs. Defaults to ``False``.
+    bot_perms_title: class `str`
+        The string to use for the bot required permissions field. Only applies
+        if show_bot_perms is set to True. Defaults to
+        "Required Bot Permissions".
+    user_guild_perms_title: class `str`
+        The string to use for the guild-wide user required permissions field.
+        Only applies if show_user_perms is set to True. Defaults to
+        "Required User Permissions".
+    user_channel_perms_title: class `str`
+        The string to use for channel-specific user required permissions field.
+        Only applies if show_user_perms is set to True. Defaults to
+        "Required User Permissions (channel specific)".
     """
 
     def __init__(self, **options):
@@ -290,6 +339,18 @@ class PrettyHelp(HelpCommand):
         self.menu = options.pop("menu", DefaultMenu())
         self.paginator = Paginator(self.color, self)
         self.ending_note = options.pop("ending_note", "")
+        self.show_user_perms = options.pop("show_user_perms", False)
+        self.show_bot_perms = options.pop("show_bot_perms", False)
+        self.bot_perms_title = options.pop(
+            "bot_perms_title", "Required Bot Permissions"
+        )
+        self.user_guild_perms_title = options.pop(
+            "user_guild_perms_title", "Required User Permissions"
+        )
+        self.user_channel_perms_title = options.pop(
+            "user_channel_perms_title",
+            "Required User Permissions (channel specific)",
+        )
 
         super().__init__(**options)
 
