@@ -36,6 +36,10 @@ bot.help_command = PrettyHelp(
     ending_note=ending_note,
     show_user_perms=True,
     show_bot_perms=True,
+    no_category="Custom No Category",
+    index_title="Custom Index Title",
+    usage_string="Custom Usage String",
+    aliases_string="Custom Aliases String",
 )
 
 

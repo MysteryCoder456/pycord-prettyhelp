@@ -174,12 +174,12 @@ class Paginator:
         if command.aliases:
             aliases = ", ".join(command.aliases)
             page.add_field(
-                name="Aliases",
+                name=self.pretty_help.aliases_string,
                 value=f"{self.prefix}{aliases}{self.suffix}",
                 inline=False,
             )
         page.add_field(
-            name="Usage",
+            name=self.pretty_help.usage_string,
             value=f"{self.usage_prefix}{signature}{self.usage_suffix}",
             inline=False,
         )
@@ -288,15 +288,6 @@ class PrettyHelp(HelpCommand):
     menu: Optional[:class:`pretty_help.PrettyMenu`]
         The menu to use for navigating pages. Defautl is :class:`DefaultMenu`
         Custom menus should inherit from :class:`pretty_help.PrettyMenu`
-    ending_note: Optional[:class:`str`]
-        The footer in of the help embed
-    index_title: :class: `str`
-        The string used when the index page is shown. Defaults to
-        ``"Categories"``
-    no_category: :class:`str`
-        The string used when there is a command which does not belong to
-        any category(cog).
-        Useful for i18n. Defaults to ``"No Category"``
     sort_commands: :class:`bool`
         Whether to sort the commands in the output alphabetically. Defaults to
         ``True``.
@@ -312,15 +303,30 @@ class PrettyHelp(HelpCommand):
     bot_perms_title: class `str`
         The string to use for the bot required permissions field. Only applies
         if show_bot_perms is set to True. Defaults to
-        "Required Bot Permissions".
+        ``"Required Bot Permissions"``.
     user_guild_perms_title: class `str`
         The string to use for the guild-wide user required permissions field.
         Only applies if show_user_perms is set to True. Defaults to
-        "Required User Permissions".
+        ``"Required User Permissions"``.
     user_channel_perms_title: class `str`
         The string to use for channel-specific user required permissions field.
         Only applies if show_user_perms is set to True. Defaults to
-        "Required User Permissions (channel specific)".
+        ``"Required User Permissions (channel specific)"``.
+    ending_note: Optional[:class:`str`]
+        The footer in of the help embed
+    index_title: :class: `str`
+        The string used when the index page is shown. Defaults to
+        ``"Categories"``
+    no_category: :class:`str`
+        The string used when there is a command which does not belong to
+        any category(cog).
+        Useful for i18n. Defaults to ``"No Category"``
+    aliases_string: :class: `str`
+        The string to use for the aliases field of a command. Defaults to
+        ``"Aliases"``.
+    usage_string: :class: `str`
+        The string to use for the usage field of a command. Defaults to
+        ``"Usage"``.
     """
 
     def __init__(self, **options):
@@ -332,13 +338,10 @@ class PrettyHelp(HelpCommand):
             ),
         )
         self.dm_help = options.pop("dm_help", False)
-        self.index_title = options.pop("index_title", "Categories")
-        self.no_category = options.pop("no_category", "No Category")
         self.sort_commands = options.pop("sort_commands", True)
         self.show_index = options.pop("show_index", True)
         self.menu = options.pop("menu", DefaultMenu())
         self.paginator = Paginator(self.color, self)
-        self.ending_note = options.pop("ending_note", "")
         self.show_user_perms = options.pop("show_user_perms", False)
         self.show_bot_perms = options.pop("show_bot_perms", False)
         self.bot_perms_title = options.pop(
@@ -351,6 +354,11 @@ class PrettyHelp(HelpCommand):
             "user_channel_perms_title",
             "Required User Permissions (channel specific)",
         )
+        self.index_title = options.pop("index_title", "Categories")
+        self.no_category = options.pop("no_category", "No Category")
+        self.ending_note = options.pop("ending_note", "")
+        self.usage_string = options.pop("usage_string", "Usage")
+        self.aliases_string = options.pop("aliases_string", "Aliases")
 
         super().__init__(**options)
 
