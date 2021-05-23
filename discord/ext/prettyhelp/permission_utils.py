@@ -34,12 +34,10 @@ def store_perms_in_command(attr_name: str):
         def predicate(**perms):
             check = permission_decorator(**perms)
 
-            def check_wrapper(func: Command):
-                if not isinstance(func, Command):
-                    raise RuntimeError(
-                        "Do to a discord.py limitation, all permission "
-                        "decorators must be put before the command decorator."
-                    )
+            def check_wrapper(_func: Command):
+                func = (
+                    _func if not isinstance(_func, Command) else _func.callback
+                )
                 to_add = [s.title().replace("_", " ") for s in perms]
                 if hasattr(func, attr_name):
                     func.__getattribute__(attr_name).extend(to_add)
@@ -47,21 +45,21 @@ def store_perms_in_command(attr_name: str):
                     func.__setattr__(
                         attr_name, to_add
                     )
-                return check(func)
+                return check(_func)
             return check_wrapper
         return predicate
     return decorator
 
 
 if not TYPE_CHECKING:
-    @store_perms_in_command("guild_perms")
+    @store_perms_in_command("__guild_perms__")
     def has_guild_permissions(*args, **kwargs):
         return r_has_guild_permissions(*args, **kwargs)
 
-    @store_perms_in_command("channel_perms")
+    @store_perms_in_command("__channel_perms__")
     def has_permissions(*args, **kwargs):
         return r_has_permissions(*args, **kwargs)
 
-    @store_perms_in_command("bot_perms")
+    @store_perms_in_command("__bot_perms__")
     def bot_has_permissions(*args, **kwargs):
         return r_bot_has_permissions(*args, **kwargs)

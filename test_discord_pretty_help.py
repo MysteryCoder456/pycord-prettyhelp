@@ -52,7 +52,10 @@ async def on_ready():
 class TestCog(commands.Cog):
     """This is a cog for testing purposes"""
 
-    @commands.command(description="This is a command description")
+    @has_guild_permissions(manage_messages=True)
+    @commands.command(
+        description="This is a command description"
+    )
     async def testcommand(self, ctx: commands.Context):
         """This is command help"""
         await ctx.send("This is a test command")
@@ -200,6 +203,15 @@ class LargeCog(commands.Cog):
     @commands.command()
     async def command29(self, ctx):
         print("command 29")
+
+
+@has_guild_permissions(manage_messages=True)
+@commands.command()
+async def testing_inject(ctx):
+    await ctx.send("testing injection")
+
+
+bot.add_command(testing_inject)
 
 
 @bot.command()

@@ -185,7 +185,7 @@ class Paginator:
         )
         if self.pretty_help.show_bot_perms:
             try:
-                perms = command.bot_perms
+                perms = command.callback.__bot_perms__
             except AttributeError:
                 pass
             else:
@@ -197,7 +197,7 @@ class Paginator:
                     )
         if self.pretty_help.show_user_perms:
             try:
-                chan_perms = command.channel_perms
+                chan_perms = command.callback.__channel_perms__
             except AttributeError:
                 pass
             else:
@@ -208,7 +208,7 @@ class Paginator:
                         inline=False,
                     )
             try:
-                guild_perms = command.guild_perms
+                guild_perms = command.callback.__guild_perms__
             except AttributeError:
                 pass
             else:
