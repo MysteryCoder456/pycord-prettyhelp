@@ -53,13 +53,13 @@ def store_perms_in_command(attr_name: str):
 
 if not TYPE_CHECKING:
     @store_perms_in_command("__guild_perms__")
-    def has_guild_permissions(*args, **kwargs):
+    def has_guild_permissions(*args, **kwargs):  # noqa: F811
         return r_has_guild_permissions(*args, **kwargs)
 
     @store_perms_in_command("__channel_perms__")
-    def has_permissions(*args, **kwargs):
+    def has_permissions(*args, **kwargs):  # noqa: F811
         return r_has_permissions(*args, **kwargs)
 
     @store_perms_in_command("__bot_perms__")
-    def bot_has_permissions(*args, **kwargs):
+    def bot_has_permissions(*args, **kwargs):  # noqa F811
         return r_bot_has_permissions(*args, **kwargs)

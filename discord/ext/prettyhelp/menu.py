@@ -21,38 +21,35 @@ class PrettyMenu(metaclass=ABCMeta):
         destination: discord.abc.Messageable,
         pages: List[discord.Embed],
     ):
-        """The function called by :class:`PrettyHelp` that will send pages"""
+        """The function called by PrettyHelp to send pages.
+
+        Args:
+            ctx (commands.Context):
+                The command context.
+            destination (discord.abc.Messageable):
+                The destination to send help to.
+            pages (List[discord.Embed]):
+                A list of embeds that should be paginated.
+        """
         pass
 
 
 class DefaultMenu(PrettyMenu):
-    """The default navigation menu for PrettyHelp.
-
-    Accepts standard emojis in multiple ways:
-        - Emoji:: "👍"
-        - Unicode:: "\\U0001F44D"
-        - Unicode Name:: "\\N{THUMBS UP SIGN}"
-
-    Using a custom emoji:
-        - Discord emoji id:: ":custom_emoji:8675309"
-
-    Use `\\` to get the discord representation:
-        Example: '\\:custom_emoji:' in discord
-
-    Args:
-        active_time: :class: `int`
-            The time in seconds the menu will be active for. Default is 10.
-        page_left (str, optional): The emoji to use for going left.
-            Defaults to "◀".
-        page_right (str, optional): The emoji to use for going right.
-            Defaults to "▶".
-        remove (str, optional): The emoji to use for removing the help message.
-            Defaults to "❌".
-    """
-
     def __init__(
         self, page_left="◀", page_right="▶", remove="❌", active_time=30
-    ) -> None:
+    ):
+        """The default navigation menu for PrettyHelp.
+
+        Args:
+            page_left (str, optional):
+                The emoji for going back a page. Defaults to "◀".
+            page_right (str, optional):
+                The emoji for going to the next page. Defaults to "▶".
+            remove (str, optional):
+                The emoji used for closing the help menu. Defaults to "❌".
+            active_time (int, optional):
+                How long to wait before automatically closing. Defaults to 30.
+        """
 
         self.page_left = self.__match(page_left)
         self.page_right = self.__match(page_right)
@@ -61,6 +58,11 @@ class DefaultMenu(PrettyMenu):
 
     @property
     def _dict(self) -> dict:
+        """Returns a dictionary mapping navigation emojis to integers.
+
+        Returns:
+            dict: The mapping of emojis to integers.
+        """
         return {
             self.page_left: -1,
             self.page_right: 1,

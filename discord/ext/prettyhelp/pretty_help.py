@@ -1,34 +1,23 @@
 __all__ = ["PrettyHelp"]
 
-from random import randint
-from typing import List, Union
+from typing import Any, List, Optional, Union
 
 import discord
 from discord.ext import commands
 from discord.ext.commands.help import HelpCommand
 
-from .menu import DefaultMenu
+from .menu import DefaultMenu, PrettyMenu
 
 
 class Paginator:
-    """A class that creates pages for Discord messages.
-
-    Attributes
-    -----------
-    prefix: Optional[:class:`str`]
-        The prefix inserted to every page. e.g. three backticks.
-    suffix: Optional[:class:`str`]
-        The suffix appended at the end of every page. e.g. three backticks.
-    max_size: :class:`int`
-        The maximum amount of codepoints allowed in a page.
-    color: Optional[:class:`discord.Color`, :class: `int`]
-        The color of the disord embed. Default is a random color for
-        every invoke
-    ending_note: Optional[:class:`str`]
-        The footer in of the help embed
-    """
-
     def __init__(self, color, pretty_help: "PrettyHelp"):
+        """A class that creates pages for PrettyHelp.
+        For internal use only.
+
+        Args:
+            color (discord.Color): The color to use for embeds.
+            pretty_help (PrettyHelp): The PrettyHelp instance.
+        """
         self.pretty_help = pretty_help
         self.ending_note = None
         self.color = color
@@ -271,104 +260,103 @@ class Paginator:
 
 
 class PrettyHelp(HelpCommand):
-    """The implementation of the prettier help command.
-    A more refined help command format
-    This inherits from :class:`HelpCommand`.
-    It extends it with the following attributes.
+    def __init__(
+        self,
+        color: discord.Color = discord.Color.random(),
+        dm_help: Optional[bool] = False,
+        menu: PrettyMenu = DefaultMenu(),
+        sort_commands: bool = True,
+        show_index: bool = True,
+        show_bot_perms: bool = False,
+        show_user_perms: bool = False,
+        bot_perms_title: str = "Required Bot Permissions",
+        user_guild_perms_title: str = "Required User Permissions",
+        user_channel_perms_title: str =
+        "Required User Permissions (channel specific)",
+        ending_note: Optional[str] = None,
+        index_title: str = "Index",
+        no_category: str = "No Category",
+        aliases_string: str = "Aliases",
+        usage_string: str = "Usage",
+        **options: Any,
+    ):
+        """PrettyHelp constructor.
 
-    Attributes
-    ------------
-
-    color: :class: `discord.Color`
-        The color to use for the help embeds. Default is a random color.
-    dm_help: Optional[:class:`bool`]
-        A tribool that indicates if the help command should DM the user
-        instead of sending it to the channel it received it from. If the
-        boolean is set to ``True``, then all help output is DM'd. If
-        ``False``, none of the help output is DM'd. If ``None``, then
-        the bot will only DM when the help message becomes too long
-        (dictated by more than :attr:`dm_help_threshold` characters).
-        Defaults to ``False``.
-    menu: Optional[:class:`pretty_help.PrettyMenu`]
-        The menu to use for navigating pages. Defautl is :class:`DefaultMenu`
-        Custom menus should inherit from :class:`pretty_help.PrettyMenu`
-    sort_commands: :class:`bool`
-        Whether to sort the commands in the output alphabetically. Defaults to
-        ``True``.
-    show_index: class: `bool`
-        A bool that indicates if the index page should be shown listing the
-        available cogs. Defaults to ``True``.
-    show_bot_perms: class: `bool`
-        Whether or not running help <command> should show the permissions that
-        the bot needs. Defaults to ``False``.
-    show_user_perms: class: `bool`
-        Whether or not running help <command> should show the permissions that
-        the user needs. Defaults to ``False``.
-    bot_perms_title: class `str`
-        The string to use for the bot required permissions field. Only applies
-        if show_bot_perms is set to True. Defaults to
-        ``"Required Bot Permissions"``.
-    user_guild_perms_title: class `str`
-        The string to use for the guild-wide user required permissions field.
-        Only applies if show_user_perms is set to True. Defaults to
-        ``"Required User Permissions"``.
-    user_channel_perms_title: class `str`
-        The string to use for channel-specific user required permissions field.
-        Only applies if show_user_perms is set to True. Defaults to
-        ``"Required User Permissions (channel specific)"``.
-    ending_note: Optional[:class:`str`]
-        The footer in of the help embed
-    index_title: :class: `str`
-        The string used when the index page is shown. Defaults to
-        ``"Categories"``
-    no_category: :class:`str`
-        The string used when there is a command which does not belong to
-        any category(cog).
-        Useful for i18n. Defaults to ``"No Category"``
-    aliases_string: :class: `str`
-        The string to use for the aliases field of a command. Defaults to
-        ``"Aliases"``.
-    usage_string: :class: `str`
-        The string to use for the usage field of a command. Defaults to
-        ``"Usage"``.
-    """
-
-    def __init__(self, **options):
-
-        self.color = options.pop(
-            "color",
-            discord.Color.from_rgb(
-                randint(0, 255), randint(0, 255), randint(0, 255)
-            ),
-        )
-        self.dm_help = options.pop("dm_help", False)
-        self.sort_commands = options.pop("sort_commands", True)
-        self.show_index = options.pop("show_index", True)
-        self.menu = options.pop("menu", DefaultMenu())
+        Args:
+            color (discord.Color, optional):
+                The color to use for help embeds. Defaults to
+                discord.Color.random().
+            dm_help (Optional[bool], optional):
+                A tribool for whether the bot should dm help or not. Defaults
+                to False.
+            menu (PrettyMenu, optional):
+                A customizable menu. Defaults to DefaultMenu().
+            sort_commands (bool, optional):
+                Whether or not commands should be sorted. Defaults to True.
+            show_index (bool, optional):
+                Whether or not to show the index page. Defaults to True.
+            show_bot_perms (bool, optional):
+                Whether or not to show required bot permissions. Defaults to
+                False.
+            show_user_perms (bool, optional):
+                Whether or not to show required user permissions. Defaults to
+                False.
+            bot_perms_title (str, optional):
+                The embed field name for required bot permissions. Defaults to
+                "Required Bot Permissions".
+            user_guild_perms_title (str, optional):
+                The embed field name for guild-wide required user permissions.
+                Defaults to "Required User Permissions".
+            user_channel_perms_title (str, optional):
+                The embed field name for channel-specific required user
+                permissions. Defaults to "Required User Permissions (channel
+                specific)".
+            ending_note (Optional[str], optional):
+                The ending note to put in the footer of embeds. Defaults to
+                None.
+            index_title (str, optional):
+                The string to use for the index embed title. Defaults to
+                "Index".
+            no_category (str, optional):
+                The string to use for commands not in a cog. Defaults to "No
+                Category".
+            aliases_string (str, optional):
+                The string to use for the aliases field. Defaults to "Aliases".
+            usage_string (str, optional):
+                The string to use for the usage field. Defaults to "Usage".
+        """
+        self.color = color
+        self.dm_help = dm_help
+        self.sort_commands = sort_commands
+        self.show_index = show_index
+        self.menu = menu
         self.paginator = Paginator(self.color, self)
-        self.show_user_perms = options.pop("show_user_perms", False)
-        self.show_bot_perms = options.pop("show_bot_perms", False)
-        self.bot_perms_title = options.pop(
-            "bot_perms_title", "Required Bot Permissions"
-        )
-        self.user_guild_perms_title = options.pop(
-            "user_guild_perms_title", "Required User Permissions"
-        )
-        self.user_channel_perms_title = options.pop(
-            "user_channel_perms_title",
-            "Required User Permissions (channel specific)",
-        )
-        self.index_title = options.pop("index_title", "Categories")
-        self.no_category = options.pop("no_category", "No Category")
-        self.ending_note = options.pop("ending_note", "")
-        self.usage_string = options.pop("usage_string", "Usage")
-        self.aliases_string = options.pop("aliases_string", "Aliases")
+        self.show_user_perms = show_user_perms
+        self.show_bot_perms = show_bot_perms
+        self.bot_perms_title = bot_perms_title
+        self.user_guild_perms_title = user_guild_perms_title
+        self.user_channel_perms_title = user_channel_perms_title
+        self.index_title = index_title
+        self.no_category = no_category
+        self.ending_note = ending_note or ""
+        self.usage_string = usage_string
+        self.aliases_string = aliases_string
 
         super().__init__(**options)
 
     async def prepare_help_command(
         self, ctx: commands.Context, command: commands.Command
     ):
+        """Prepares the help command. Desinged for internal call only.
+
+        Args:
+            ctx (commands.Context): The context help was invoked in.
+            command (commands.Command): The command help was invoked for.
+
+        Raises:
+            commands.BotMissingPermissions:
+                The bot is missing permissions needed to run the paginator.
+        """
         if ctx.guild is not None:
             perms = ctx.channel.permissions_for(ctx.guild.me)
             missing: List[str] = []
@@ -385,10 +373,12 @@ class PrettyHelp(HelpCommand):
         self.paginator.ending_note = self.get_ending_note()
         await super().prepare_help_command(ctx, command)
 
-    def get_ending_note(self):
-        """Returns help command's ending note.
+    def get_ending_note(self) -> str:
+        """Gets the ending note for the bot.
 
-        This is mainly useful to override for i18n purposes."""
+        Returns:
+            str: The ending note.
+        """
         note = self.ending_note or (
             "Type {help.clean_prefix}{help.invoked_with} command for more "
             "info on a command.\nYou can also type {help.clean_prefix}"
@@ -397,11 +387,18 @@ class PrettyHelp(HelpCommand):
         return note.format(ctx=self.context, help=self)
 
     async def send_pages(self):
+        """Invokes self.menu.send_pages with the list of embeds.
+        """
         pages = self.paginator.pages
         destination = self.get_destination()
         await self.menu.send_pages(self.context, destination, pages)
 
-    def get_destination(self):
+    def get_destination(self) -> discord.abc.Messageable:
+        """Gets the destination to send help to.
+
+        Returns:
+            discord.abc.Messageable: The destination channel.
+        """
         ctx = self.context
         if self.dm_help is True:
             return ctx.author
@@ -409,6 +406,12 @@ class PrettyHelp(HelpCommand):
             return ctx.channel
 
     async def send_bot_help(self, mapping: dict):
+        """Sends help for the entire bot.
+        For internal use only.
+
+        Args:
+            mapping (dict): A dictionary of Cogs and Commands.
+        """
         bot = self.context.bot
         channel = self.get_destination()
         async with channel.typing():
@@ -431,6 +434,11 @@ class PrettyHelp(HelpCommand):
         await self.send_pages()
 
     async def send_command_help(self, command: commands.Command):
+        """Sends help for a single command.
+
+        Args:
+            command (commands.Command): The command to send help for.
+        """
         filtered = await self.filter_commands([command])
         if filtered:
             self.paginator.add_command(
@@ -439,6 +447,11 @@ class PrettyHelp(HelpCommand):
             await self.send_pages()
 
     async def send_group_help(self, group: commands.Group):
+        """Sends help for a command group.
+
+        Args:
+            group (commands.Group): The command group to send help for.
+        """
         async with self.get_destination().typing():
             filtered = await self.filter_commands(
                 group.commands, sort=self.sort_commands
@@ -447,6 +460,11 @@ class PrettyHelp(HelpCommand):
         await self.send_pages()
 
     async def send_cog_help(self, cog: commands.Cog):
+        """Sends help for an entire cog.
+
+        Args:
+            cog (commands.Cog): The cog to send help for.
+        """
         async with self.get_destination().typing():
             filtered = await self.filter_commands(
                 cog.get_commands(), sort=self.sort_commands
