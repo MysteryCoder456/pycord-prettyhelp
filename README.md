@@ -4,6 +4,8 @@ An embed version of the built in help command for discord.py
 
 Inspired by the DefaultHelpCommand that discord.py uses, but revised for embeds and additional sorting on individual pages that can be "scrolled" through with reactions.
 
+For support, please join https://discord.gg/dGAzZDaTS9.
+
 ## Installation
 
 `pip install discord-ext-prettyhelp`
