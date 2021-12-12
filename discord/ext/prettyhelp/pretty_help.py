@@ -380,8 +380,8 @@ class PrettyHelp(HelpCommand):
             str: The ending note.
         """
         note = self.ending_note or (
-            "Type {help.clean_prefix}{help.invoked_with} command for more "
-            "info on a command.\nYou can also type {help.clean_prefix}"
+            "Type {ctx.clean_prefix}{help.invoked_with} command for more "
+            "info on a command.\nYou can also type {ctx.clean_prefix}"
             "{help.invoked_with} category for more info on a category."
         )
         return note.format(ctx=self.context, help=self)
