@@ -1,14 +1,14 @@
-# discord-ext-prettyhelp
+# pycord-prettyhelp
 
 An embed version of the built in help command for discord.py
 
 Inspired by the DefaultHelpCommand that discord.py uses, but revised for embeds and additional sorting on individual pages that can be "scrolled" through with reactions.
 
-For support, please join https://discord.gg/dGAzZDaTS9.
+Made this fork because the original library was built for discord.py which is no longer maintained.
 
 ## Installation
 
-`pip install discord-ext-prettyhelp`
+`pip install pycord-prettyhelp`
 
 ## Usage
 
