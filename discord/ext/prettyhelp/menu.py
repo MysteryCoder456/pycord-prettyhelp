@@ -6,7 +6,7 @@ from abc import ABCMeta
 from typing import List
 
 import discord
-from discord.embeds import EmptyEmbed
+from discord import Embed
 from discord.ext import commands
 
 
@@ -113,7 +113,7 @@ class DefaultMenu(PrettyMenu):
         if total > 1:
             for x, e in enumerate(pages, 1):
                 new_footer = (
-                    e.footer.text + "\n" if e.footer.text is not EmptyEmbed
+                    e.footer.text + "\n" if e.footer.text is not Embed
                     else ""
                 ) + f"Page {x}/{total}"
                 e.set_footer(text=new_footer)
